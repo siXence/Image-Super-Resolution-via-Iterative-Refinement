@@ -25,10 +25,13 @@ class PositionalEncoding(nn.Module):
         count = self.dim // 2
         step = torch.arange(count, dtype=noise_level.dtype,
                             device=noise_level.device) / count
+        print("wangxu step = ", step.size())
         encoding = noise_level.unsqueeze(
             1) * torch.exp(-math.log(1e4) * step.unsqueeze(0))
+        print("wangxu eencoding 1 = ", encoding.size())
         encoding = torch.cat(
             [torch.sin(encoding), torch.cos(encoding)], dim=-1)
+        print("wangxu eencoding 2 = ", encoding.size())
         return encoding
 
 
