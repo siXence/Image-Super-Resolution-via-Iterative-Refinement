@@ -21,7 +21,7 @@ class PositionalEncoding(nn.Module):
         self.dim = dim
 
     def forward(self, noise_level):
-        print("wangxu noise_level = ", noise_level.size())
+        print("wangxu noise_level = ", noise_level.size(), ", value = ", noise_level)
         count = self.dim // 2
         step = torch.arange(count, dtype=noise_level.dtype,
                             device=noise_level.device) / count
