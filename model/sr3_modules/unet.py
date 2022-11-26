@@ -81,9 +81,9 @@ class Block(nn.Module):
     def __init__(self, dim, dim_out, groups=32, dropout=0):
         super().__init__()
         self.block = nn.Sequential(
-            nn.GroupNorm(groups, dim),
-            Swish(),
-            nn.Dropout(dropout) if dropout != 0 else nn.Identity(),
+            #nn.GroupNorm(groups, dim),
+            #Swish(),
+            #nn.Dropout(dropout) if dropout != 0 else nn.Identity(),
             nn.Conv2d(dim, dim_out, 3, padding=1)
         )
 
@@ -116,7 +116,7 @@ class SelfAttention(nn.Module):
 
         self.n_head = n_head
 
-        self.norm = nn.GroupNorm(norm_groups, in_channel)
+        #self.norm = nn.GroupNorm(norm_groups, in_channel)
         self.qkv = nn.Conv2d(in_channel, in_channel * 3, 1, bias=False)
         self.out = nn.Conv2d(in_channel, in_channel, 1)
 
@@ -165,7 +165,8 @@ class UNet(nn.Module):
         out_channel=3,
         inner_channel=32,
         norm_groups=32,
-        channel_mults=(1, 2, 4, 8, 8),
+        #channel_mults=(1, 2, 4, 8, 8),
+        channel_mults=(1, 2, 3, 4),
         attn_res=(8),
         res_blocks=3,
         dropout=0,
@@ -177,7 +178,7 @@ class UNet(nn.Module):
         if with_noise_level_emb:
             noise_level_channel = inner_channel
             self.noise_level_mlp = nn.Sequential(
-                PositionalEncoding(inner_channel),
+                #PositionalEncoding(inner_channel),
                 nn.Linear(inner_channel, inner_channel * 4),
                 Swish(),
                 nn.Linear(inner_channel * 4, inner_channel)
@@ -197,8 +198,10 @@ class UNet(nn.Module):
             use_attn = (now_res in attn_res)
             channel_mult = inner_channel * channel_mults[ind]
             for _ in range(0, res_blocks):
+                #downs.append(ResnetBlocWithAttn(
+                #    pre_channel, channel_mult, noise_level_emb_dim=noise_level_channel, norm_groups=norm_groups, dropout=dropout, with_attn=use_attn))
                 downs.append(ResnetBlocWithAttn(
-                    pre_channel, channel_mult, noise_level_emb_dim=noise_level_channel, norm_groups=norm_groups, dropout=dropout, with_attn=use_attn))
+                    pre_channel, channel_mult, noise_level_emb_dim=noise_level_channel, norm_groups=norm_groups, dropout=dropout, with_attn=False))
                 feat_channels.append(channel_mult)
                 pre_channel = channel_mult
             if not is_last:
@@ -209,7 +212,7 @@ class UNet(nn.Module):
 
         self.mid = nn.ModuleList([
             ResnetBlocWithAttn(pre_channel, pre_channel, noise_level_emb_dim=noise_level_channel, norm_groups=norm_groups,
-                               dropout=dropout, with_attn=True),
+                               dropout=dropout, with_attn=False),
             ResnetBlocWithAttn(pre_channel, pre_channel, noise_level_emb_dim=noise_level_channel, norm_groups=norm_groups,
                                dropout=dropout, with_attn=False)
         ])
@@ -221,8 +224,10 @@ class UNet(nn.Module):
             channel_mult = inner_channel * channel_mults[ind]
             for _ in range(0, res_blocks+1):
                 ups.append(ResnetBlocWithAttn(
+                    #pre_channel+feat_channels.pop(), channel_mult, noise_level_emb_dim=noise_level_channel, norm_groups=norm_groups,
+                    #    dropout=dropout, with_attn=use_attn))
                     pre_channel+feat_channels.pop(), channel_mult, noise_level_emb_dim=noise_level_channel, norm_groups=norm_groups,
-                        dropout=dropout, with_attn=use_attn))
+                        dropout=dropout, with_attn=False))
                 pre_channel = channel_mult
             if not is_last:
                 ups.append(Upsample(pre_channel))
