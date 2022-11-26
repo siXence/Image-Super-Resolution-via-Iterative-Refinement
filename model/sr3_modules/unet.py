@@ -178,7 +178,7 @@ class UNet(nn.Module):
 
         if with_noise_level_emb:
             noise_level_channel = inner_channel
-            print("wangxu inner_channel = ", inner_channel.size())
+            print("wangxu inner_channel = ", inner_channel)
             self.noise_level_mlp = nn.Sequential(
                 PositionalEncoding(inner_channel),
                 nn.Linear(inner_channel, inner_channel * 4),
