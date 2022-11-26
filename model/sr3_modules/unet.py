@@ -21,17 +21,13 @@ class PositionalEncoding(nn.Module):
         self.dim = dim
 
     def forward(self, noise_level):
-        print("wangxu noise_level = ", noise_level.size(), ", value = ", noise_level)
         count = self.dim // 2
         step = torch.arange(count, dtype=noise_level.dtype,
                             device=noise_level.device) / count
-        print("wangxu step = ", step.size())
         encoding = noise_level.unsqueeze(
             1) * torch.exp(-math.log(1e4) * step.unsqueeze(0))
-        print("wangxu eencoding 1 = ", encoding.size())
         encoding = torch.cat(
             [torch.sin(encoding), torch.cos(encoding)], dim=-1)
-        print("wangxu eencoding 2 = ", encoding.size())
         return encoding
 
 
@@ -174,14 +170,13 @@ class UNet(nn.Module):
         attn_res=(8),
         res_blocks=3,
         dropout=0,
-        with_noise_level_emb=True,
+        with_noise_level_emb=False,
         image_size=128
     ):
         super().__init__()
 
         if with_noise_level_emb:
             noise_level_channel = inner_channel
-            print("wangxu inner_channel = ", inner_channel)
             self.noise_level_mlp = nn.Sequential(
                 PositionalEncoding(inner_channel),
                 nn.Linear(inner_channel, inner_channel * 4),
@@ -243,7 +238,6 @@ class UNet(nn.Module):
         self.final_conv = Block(pre_channel, default(out_channel, in_channel), groups=norm_groups)
 
     def forward(self, x, time):
-        print("wangxu times = ", time.size())
         t = self.noise_level_mlp(time) if exists(
             self.noise_level_mlp) else None
 
