@@ -21,7 +21,7 @@ class PositionalEncoding(nn.Module):
         self.dim = dim
 
     def forward(self, noise_level):
-        print("wangxu noise_level = ", noise_level)
+        print("wangxu noise_level = ", noise_level.size())
         count = self.dim // 2
         step = torch.arange(count, dtype=noise_level.dtype,
                             device=noise_level.device) / count
@@ -178,7 +178,7 @@ class UNet(nn.Module):
 
         if with_noise_level_emb:
             noise_level_channel = inner_channel
-            print("wangxu inner_channel = ", inner_channel)
+            print("wangxu inner_channel = ", inner_channel.size())
             self.noise_level_mlp = nn.Sequential(
                 PositionalEncoding(inner_channel),
                 nn.Linear(inner_channel, inner_channel * 4),
