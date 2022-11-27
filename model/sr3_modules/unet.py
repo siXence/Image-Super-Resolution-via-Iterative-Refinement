@@ -35,9 +35,6 @@ class FeatureWiseAffine(nn.Module):
     def __init__(self, in_channels, out_channels, use_affine_level=False):
         super(FeatureWiseAffine, self).__init__()
         self.use_affine_level = use_affine_level
-        print("wangxu debug in_channels = ", in_channels)
-        print("wangxu debug out_channels = ", out_channels)
-        print("wangxu debug self.use_affine_level = ", self.use_affine_level)
         self.noise_func = nn.Sequential(
             nn.Linear(in_channels, out_channels*(1+self.use_affine_level))
         )
@@ -97,9 +94,6 @@ class Block(nn.Module):
 class ResnetBlock(nn.Module):
     def __init__(self, dim, dim_out, noise_level_emb_dim=None, dropout=0, use_affine_level=False, norm_groups=32):
         super().__init__()
-        print("wangxu debug noise_level_emb_dim = ", noise_level_emb_dim)
-        print("wangxu debug dim_out = ", dim_out)
-        print("wangxu debug use_affine_level = ", use_affine_level)
         self.noise_func = FeatureWiseAffine(
             noise_level_emb_dim, dim_out, use_affine_level)
 
