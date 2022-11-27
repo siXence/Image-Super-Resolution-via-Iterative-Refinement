@@ -81,7 +81,6 @@ if __name__ == "__main__":
         while current_step < n_iter:
             current_epoch += 1
             for _, train_data in enumerate(train_loader):
-                print("wangxu debug train_data = ", train_data.size())
                 current_step += 1
                 if current_step > n_iter:
                     break
@@ -93,7 +92,7 @@ if __name__ == "__main__":
                     message = '<epoch:{:3d}, iter:{:8,d}> '.format(
                         current_epoch, current_step)
                     for k, v in logs.items():
-                        message += '{:s}: {:.4e} '.format(k, v)
+r                       message += '{:s}: {:.4e} '.format(k, v)
                         tb_logger.add_scalar(k, v, current_step)
                     logger.info(message)
 
