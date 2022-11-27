@@ -77,10 +77,12 @@ if __name__ == "__main__":
 
     diffusion.set_new_noise_schedule(
         opt['model']['beta_schedule'][opt['phase']], schedule_phase=opt['phase'])
+    print("wangxu debug train_loader = ", train_loader.size())
     if opt['phase'] == 'train':
         while current_step < n_iter:
             current_epoch += 1
             for _, train_data in enumerate(train_loader):
+                print("wangxu debug train_data = ", train_data.size())
                 current_step += 1
                 if current_step > n_iter:
                     break
