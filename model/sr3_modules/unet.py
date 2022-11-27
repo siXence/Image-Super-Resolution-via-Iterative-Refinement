@@ -176,7 +176,7 @@ class UNet(nn.Module):
         attn_res=(8),
         res_blocks=3,
         dropout=0,
-        with_noise_level_emb=False,
+        with_noise_level_emb=True,
         image_size=128
     ):
         super().__init__()
@@ -190,8 +190,7 @@ class UNet(nn.Module):
                 nn.Linear(inner_channel * 4, inner_channel)
             )
         else:
-            #noise_level_channel = None
-            noise_level_channel = inner_channel
+            noise_level_channel = None
             self.noise_level_mlp = None
 
         num_mults = len(channel_mults)
