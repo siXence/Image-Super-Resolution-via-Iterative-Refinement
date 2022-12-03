@@ -39,8 +39,8 @@
         "which_model_G": "sr3", // use the ddpm or sr3 network structure
         "finetune_norm": false,
         "unet": {
-            "in_channel": 6,
-            "out_channel": 3,
+            "in_channel": 2,
+            "out_channel": 1,
             "inner_channel": 64,
             "channel_multiplier": [
                 1,
