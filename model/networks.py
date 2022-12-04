@@ -99,8 +99,20 @@ def define_G(opt):
         dropout=model_opt['unet']['dropout'],
         image_size=model_opt['diffusion']['image_size']
     )
+    init_predictor = unet.UNet(
+        in_channel=model_opt['initp']['in_channel'],
+        out_channel=model_opt['initp']['out_channel'],
+        norm_groups=model_opt['initp']['norm_groups'],
+        inner_channel=model_opt['initp']['inner_channel'],
+        channel_mults=model_opt['initp']['channel_multiplier'],
+        attn_res=model_opt['initp']['attn_res'],
+        res_blocks=model_opt['initp']['res_blocks'],
+        dropout=model_opt['initp']['dropout'],
+        image_size=model_opt['diffusion']['image_size']
+    )
     netG = diffusion.GaussianDiffusion(
         model,
+        init_predictor,
         image_size=model_opt['diffusion']['image_size'],
         channels=model_opt['diffusion']['channels'],
         loss_type='l1',    # L1 or L2

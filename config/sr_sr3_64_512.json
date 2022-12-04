@@ -38,19 +38,33 @@
     "model": {
         "which_model_G": "sr3", // use the ddpm or sr3 network structure
         "finetune_norm": false,
-        "unet": {
-            "in_channel": 6,
-            "out_channel": 3,
+        "initp": {
+            "in_channel": 1,
+            "out_channel": 1,
             "inner_channel": 64,
             "norm_groups": 16,
             "channel_multiplier": [
                 1,
                 2,
-                4,
-                8,
-                // 8,
-                // 16,
-                16
+                3,
+                4
+            ],
+            "attn_res": [
+                // 16
+            ],
+            "res_blocks": 1,
+            "dropout": 0
+        },
+        "unet": {
+            "in_channel": 2,
+            "out_channel": 1,
+            "inner_channel": 64,
+            "norm_groups": 16,
+            "channel_multiplier": [
+                1,
+                2,
+                3,
+                4
             ],
             "attn_res": [
                 // 16
@@ -73,8 +87,8 @@
             }
         },
         "diffusion": {
-            "image_size": 512,
-            "channels": 3, //sample channel
+            "image_size": 64,
+            "channels": 1, //sample channel
             "conditional": true // unconditional generation or unconditional generation(super_resolution)
         }
     },

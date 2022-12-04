@@ -65,6 +65,7 @@ class GaussianDiffusion(nn.Module):
     def __init__(
         self,
         denoise_fn,
+        init_predictor,
         image_size,
         channels=3,
         loss_type='l1',
@@ -75,6 +76,7 @@ class GaussianDiffusion(nn.Module):
         self.channels = channels
         self.image_size = image_size
         self.denoise_fn = denoise_fn
+        self.init_predictor = init_predictor
         self.loss_type = loss_type
         self.conditional = conditional
         if schedule_opt is not None:
@@ -242,7 +244,9 @@ class GaussianDiffusion(nn.Module):
             x_recon = self.denoise_fn(
                 torch.cat([x_in['SR'], x_noisy], dim=1), continuous_sqrt_alpha_cumprod)
 
-        loss = self.loss_func(noise, x_recon)
+        init_predictor = self.init_predictor(x_start, continuous_sqrt_alpha_cumprod)
+
+        loss = self.loss_func(noise, x_recon - init_predictor)
         return loss
 
     def forward(self, x, *args, **kwargs):
