@@ -118,6 +118,7 @@ if __name__ == "__main__":
                         hr_img = Metrics.tensor2img(visuals['HR'])  # uint8
                         lr_img = Metrics.tensor2img(visuals['LR'])  # uint8
                         fake_img = Metrics.tensor2img(visuals['INF'])  # uint8
+                        
 
                         # generation
                         Metrics.save_img(
@@ -128,6 +129,9 @@ if __name__ == "__main__":
                             lr_img, '{}/{}_{}_lr.png'.format(result_path, current_step, idx))
                         Metrics.save_img(
                             fake_img, '{}/{}_{}_inf.png'.format(result_path, current_step, idx))
+                        print("wangxu debug fake_img = ", fake_img.size())
+                        print("wangxu debug sr_img = ", sr_img.size())
+                        print("wangxu debug hr_img = ", hr_img.size())
                         tb_logger.add_image(
                             'Iter_{}'.format(current_step),
                             np.transpose(np.concatenate(
