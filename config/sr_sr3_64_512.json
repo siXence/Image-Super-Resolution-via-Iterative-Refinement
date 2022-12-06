@@ -93,9 +93,9 @@
         }
     },
     "train": {
-        "n_iter": 200,
-        "val_freq": 100,
-        "save_checkpoint_freq": 100,
+        "n_iter": 1000000,
+        "val_freq": 10000,
+        "save_checkpoint_freq": 10000,
         "print_freq": 50,
         "optimizer": {
             "type": "adam",
