@@ -132,10 +132,15 @@ if __name__ == "__main__":
                         print("wangxu debug fake_img = ", fake_img)
                         print("wangxu debug sr_img = ", sr_img)
                         print("wangxu debug hr_img = ", hr_img)
+                        #tb_logger.add_image(
+                        #    'Iter_{}'.format(current_step),
+                        #    np.transpose(np.concatenate(
+                        #        (fake_img, sr_img, hr_img), axis=1), [2, 0, 1]),
+                        #    idx)
                         tb_logger.add_image(
                             'Iter_{}'.format(current_step),
-                            np.transpose(np.concatenate(
-                                (fake_img, sr_img, hr_img), axis=1), [2, 0, 1]),
+                            np.concatenate(
+                                (fake_img, sr_img, hr_img), axis=1),
                             idx)
                         avg_psnr += Metrics.calculate_psnr(
                             sr_img, hr_img)
