@@ -1,4 +1,5 @@
 from skimage import util
+from skimage.color import rgb2gray
 import numpy as np
 import os
 import cv2
@@ -19,9 +20,10 @@ for elem in os.listdir(input_path):
     if i % 1000:
         print("Processed " + str(i) + "...")
     img = cv2.imread(f'{input_path}/{elem}')
-    out2 = util.random_noise(img, "s&p")
+    out2 = util.random_noise(rgb2gray(img), "gaussian")
     out2 = out2 * 255
     out2 = out2.astype(np.int16)
-    cv2.imwrite(f'{output_path}/{elem}', img)
+    #cv2.imwrite(f'{output_path}/{elem}', img)
+    cv2.imwrite(f'{output_path}/{elem}', out2)
 
 

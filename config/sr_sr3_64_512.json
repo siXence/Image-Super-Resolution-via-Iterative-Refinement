@@ -16,10 +16,10 @@
         "train": {
             "name": "FFHQ",
             "mode": "HR", // whether need LR img
-            "dataroot": "dataset/cifar10train2_32_32",
+            "dataroot": "dataset/new_data_512_512",
             "datatype": "img", //lmdb or img, path of img files
-            "l_resolution": 32, // low resolution need to super_resolution
-            "r_resolution": 32, // high resolution
+            "l_resolution": 512, // low resolution need to super_resolution
+            "r_resolution": 512, // high resolution
             "batch_size": 2,
             "num_workers": 8,
             "use_shuffle": true,
@@ -28,10 +28,10 @@
         "val": {
             "name": "CelebaHQ",
             "mode": "LRHR",
-            "dataroot": "dataset/cifar10eval2_32_32",
+            "dataroot": "dataset/new_data_512_512",
             "datatype": "img", //lmdb or img, path of img files
-            "l_resolution": 32,
-            "r_resolution": 32,
+            "l_resolution": 512,
+            "r_resolution": 512,
             "data_len": 50
         }
     },
