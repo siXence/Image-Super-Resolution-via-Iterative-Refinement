@@ -77,12 +77,14 @@ if __name__ == "__main__":
         if sr_img_mode == 'single':
             # single img series
             sr_img = visuals['SR']  # uint8
+            print("wangxu debug sr = ", visuals['SR'].size())
             sample_num = sr_img.shape[0]
             for iter in range(0, sample_num):
                 Metrics.save_img(
                     Metrics.tensor2img(sr_img[iter]), '{}/{}_{}_sr_{}.png'.format(result_path, current_step, idx, iter))
         else:
             # grid img
+            print("wangxu debug sr = ", visuals['SR'].size())
             sr_img = Metrics.tensor2img(visuals['SR'])  # uint8
             Metrics.save_img(
                 sr_img, '{}/{}_{}_sr_process.png'.format(result_path, current_step, idx))
