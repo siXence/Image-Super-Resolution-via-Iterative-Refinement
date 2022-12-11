@@ -190,6 +190,7 @@ class GaussianDiffusion(nn.Module):
         else:
             x = x_in
             shape = x.shape
+            print("wangxu debug the shape = ", shape)
             img = torch.randn(shape, device=device)
             ret_img = x
             for i in tqdm(reversed(range(0, self.num_timesteps)), desc='sampling loop time step', total=self.num_timesteps):
