@@ -67,7 +67,7 @@ if __name__ == "__main__":
     for _,  val_data in enumerate(val_loader):
         idx += 1
         diffusion.feed_data(val_data)
-        diffusion.test(continous=True)
+        diffusion.test(continous=False)
         visuals = diffusion.get_current_visuals(need_LR=False)
 
         hr_img = Metrics.tensor2img(visuals['HR'])  # uint8
@@ -84,8 +84,9 @@ if __name__ == "__main__":
                     Metrics.tensor2img(sr_img[iter]), '{}/{}_{}_sr_{}.png'.format(result_path, current_step, idx, iter))
         else:
             # grid img
-            print("wangxu debug sr = ", visuals['SR'].size())
+            #print("wangxu debug sr = ", visuals['SR'].size())
             sr_img = Metrics.tensor2img(visuals['SR'])  # uint8
+            print("wangxu img save = {}/{}_{}_sr_process.png".format(result_path, current_step, idx))
             Metrics.save_img(
                 sr_img, '{}/{}_{}_sr_process.png'.format(result_path, current_step, idx))
             Metrics.save_img(
