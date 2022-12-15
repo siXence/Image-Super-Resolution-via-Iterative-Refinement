@@ -188,9 +188,8 @@ class UNet(nn.Module):
                 nn.Linear(inner_channel * 4, inner_channel)
             )
         else:
-            noise_level_channel = None
-            self.noise_level_mlp = None
-            self.inner_channel = inner_channel
+            noise_level_channel = inner_channel
+            self.noise_level_mlp = nn.Linear(inner_channel, inner_channel)
 
         num_mults = len(channel_mults)
         pre_channel = inner_channel
