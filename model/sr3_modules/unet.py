@@ -26,8 +26,10 @@ class PositionalEncoding(nn.Module):
                             device=noise_level.device) / count
         encoding = noise_level.unsqueeze(
             1) * torch.exp(-math.log(1e4) * step.unsqueeze(0))
+        #encoding = torch.cat(
+        #    [torch.sin(encoding), torch.cos(encoding)], dim=-1)
         encoding = torch.cat(
-            [torch.sin(encoding), torch.cos(encoding)], dim=-1)
+            [torch.ones(encoding), torch.ones(encoding)], dim=-1)
         return encoding
 
 
@@ -174,20 +176,11 @@ class UNet(nn.Module):
         attn_res=(8),
         res_blocks=3,
         dropout=0,
-        with_noise_level_emb=False,
+        with_noise_level_emb=True,
         image_size=128
     ):
         super().__init__()
 
-        noise_level_channel = inner_channel
-        self.noise_level_mlp = nn.Sequential(
-            PositionalEncoding(inner_channel),
-            nn.Linear(inner_channel, inner_channel * 4),
-            Swish(),
-            nn.Linear(inner_channel * 4, inner_channel)
-        )
-        print("wangxu the network")
-        print(self.noise_level_mlp)
         if with_noise_level_emb:
             noise_level_channel = inner_channel
             self.noise_level_mlp = nn.Sequential(
