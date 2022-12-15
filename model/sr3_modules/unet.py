@@ -33,6 +33,8 @@ class PositionalEncoding(nn.Module):
 
 
 
+
+
 class FeatureWiseAffine(nn.Module):
     def __init__(self, in_channels, out_channels, use_affine_level=False):
         super(FeatureWiseAffine, self).__init__()
