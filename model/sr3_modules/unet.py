@@ -21,7 +21,8 @@ class PositionalEncoding(nn.Module):
         self.dim = dim
 
     def forward(self, noise_level):
-        count = self.dim // 2
+        #count = self.dim // 2
+        count = self.dim
         step = torch.arange(count, dtype=noise_level.dtype,
                             device=noise_level.device) / count
         encoding = noise_level.unsqueeze(
