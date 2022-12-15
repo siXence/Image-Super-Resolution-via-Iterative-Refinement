@@ -186,6 +186,7 @@ class UNet(nn.Module):
         else:
             noise_level_channel = None
             self.noise_level_mlp = None
+            self.inner_channel = inner_channel
 
         num_mults = len(channel_mults)
         pre_channel = inner_channel
@@ -238,8 +239,10 @@ class UNet(nn.Module):
         self.final_conv = Block(pre_channel, default(out_channel, in_channel), groups=norm_groups)
 
     def forward(self, x, time):
+        #t = self.noise_level_mlp(time) if exists(
+        #    self.noise_level_mlp) else None
         t = self.noise_level_mlp(time) if exists(
-            self.noise_level_mlp) else None
+            self.noise_level_mlp) else self.inner_channel
 
         feats = []
         for layer in self.downs:
