@@ -179,6 +179,15 @@ class UNet(nn.Module):
     ):
         super().__init__()
 
+        noise_level_channel = inner_channel
+        self.noise_level_mlp = nn.Sequential(
+            PositionalEncoding(inner_channel),
+            nn.Linear(inner_channel, inner_channel * 4),
+            Swish(),
+            nn.Linear(inner_channel * 4, inner_channel)
+        )
+        print("wangxu the network")
+        print(self.noise_level_mlp)
         if with_noise_level_emb:
             noise_level_channel = inner_channel
             self.noise_level_mlp = nn.Sequential(
