@@ -30,6 +30,8 @@ class LRHRDataset(Dataset):
                 '{}/sr_{}_{}'.format(dataroot, l_resolution, r_resolution))
             self.hr_path = Util.get_paths_from_images(
                 '{}/hr_{}'.format(dataroot, r_resolution))
+            self.gt_path = Util.get_paths_from_images(
+                '{}/gt_{}'.format(dataroot, 512))
             if self.need_LR:
                 self.lr_path = Util.get_paths_from_images(
                     '{}/lr_{}'.format(dataroot, l_resolution))
@@ -87,13 +89,14 @@ class LRHRDataset(Dataset):
         else:
             img_HR = Image.open(self.hr_path[index]).convert("L")
             img_SR = Image.open(self.sr_path[index]).convert("L")
+            img_GT = Image.open(self.gt_path[index]).convert("L")
             if self.need_LR:
                 img_LR = Image.open(self.lr_path[index]).convert("L")
         if self.need_LR:
-            [img_LR, img_SR, img_HR] = Util.transform_augment(
-                [img_LR, img_SR, img_HR], split=self.split, min_max=(-1, 1))
-            return {'LR': img_LR, 'HR': img_HR, 'SR': img_SR, 'Index': index}
+            [img_LR, img_SR, img_HR, img_GT] = Util.transform_augment(
+                [img_LR, img_SR, img_HR, img_GT], split=self.split, min_max=(-1, 1))
+            return {'LR': img_LR, 'HR': img_HR, 'SR': img_SR, 'GT': img_GT, 'Index': index}
         else:
-            [img_SR, img_HR] = Util.transform_augment(
-                [img_SR, img_HR], split=self.split, min_max=(-1, 1))
-            return {'HR': img_HR, 'SR': img_SR, 'Index': index}
+            [img_SR, img_HR, img_GT] = Util.transform_augment(
+                [img_SR, img_HR, img_GT], split=self.split, min_max=(-1, 1))
+            return {'HR': img_HR, 'SR': img_SR, 'GT': img_GT, 'Index': index}

@@ -10,7 +10,7 @@
         "results": "results",
         "checkpoint": "checkpoint",
         //"resume_state": null
-        "resume_state": "experiments/distributed_high_sr_ffhq_221216_112838/checkpoint/I3000_E2" //pretrain model or training state
+        "resume_state": "experiments/distributed_high_sr_ffhq_221216_133227/checkpoint/I4000_E2" //pretrain model or training state
     },
     "datasets": {
         "train": {
@@ -75,13 +75,13 @@
         "beta_schedule": { // use munual beta_schedule for acceleration
             "train": {
                 "schedule": "linear",
-                "n_timestep": 20,
+                "n_timestep": 2000,
                 "linear_start": 1e-6,
                 "linear_end": 1e-2
             },
             "val": {
                 "schedule": "linear",
-                "n_timestep": 20,
+                "n_timestep": 2000,
                 "linear_start": 1e-6,
                 "linear_end": 1e-2
             }
