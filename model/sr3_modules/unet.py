@@ -209,7 +209,7 @@ class UNet(nn.Module):
                 #downs.append(ResnetBlocWithAttn(
                 #    pre_channel, channel_mult, noise_level_emb_dim=noise_level_channel, norm_groups=norm_groups, dropout=dropout, with_attn=use_attn))
                 downs.append(ResnetBlocWithAttn(
-                    pre_channzl, channel_mult, noise_level_emb_dim=noise_level_channel, norm_groups=norm_groups, dropout=dropout, with_attn=False, with_sample=with_sample))
+                    pre_channel, channel_mult, noise_level_emb_dim=noise_level_channel, norm_groups=norm_groups, dropout=dropout, with_attn=False, with_sample=with_sample))
                 feat_channels.append(channel_mult)
                 pre_channel = channel_mult
             if not is_last:
