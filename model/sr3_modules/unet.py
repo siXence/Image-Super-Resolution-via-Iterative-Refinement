@@ -104,13 +104,14 @@ class ResnetBlock(nn.Module):
 
         self.block1 = Block(dim, dim_out, groups=norm_groups)
         self.block2 = Block(dim_out, dim_out, groups=norm_groups, dropout=dropout)
+        self.with_sample = with_sample
         self.res_conv = nn.Conv2d(
             dim, dim_out, 1) if dim != dim_out else nn.Identity()
 
     def forward(self, x, time_emb):
         b, c, h, w = x.shape
         h = self.block1(x)
-        if(with_sample):
+        if(self.with_sample):
             h = self.noise_func(h, time_emb)
         h = self.block2(h)
         return h + self.res_conv(x)
