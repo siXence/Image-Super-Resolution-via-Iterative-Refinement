@@ -97,7 +97,7 @@ class Block(nn.Module):
 
 
 class ResnetBlock(nn.Module):
-    def __init__(self, dim, dim_out, noise_level_emb_dim=None, dropout=0, use_affine_level=False, norm_groups=32):
+    def __init__(self, dim, dim_out, noise_level_emb_dim=None, dropout=0, use_affine_level=False, norm_groups=32, with_sample=True):
         super().__init__()
         self.noise_func = FeatureWiseAffine(
             noise_level_emb_dim, dim_out, use_affine_level)
@@ -110,7 +110,8 @@ class ResnetBlock(nn.Module):
     def forward(self, x, time_emb):
         b, c, h, w = x.shape
         h = self.block1(x)
-        h = self.noise_func(h, time_emb)
+        if(with_sample):
+            h = self.noise_func(h, time_emb)
         h = self.block2(h)
         return h + self.res_conv(x)
 
@@ -148,11 +149,11 @@ class SelfAttention(nn.Module):
 
 
 class ResnetBlocWithAttn(nn.Module):
-    def __init__(self, dim, dim_out, *, noise_level_emb_dim=None, norm_groups=32, dropout=0, with_attn=False):
+    def __init__(self, dim, dim_out, *, noise_level_emb_dim=None, norm_groups=32, dropout=0, with_attn=False, with_sample=True):
         super().__init__()
         self.with_attn = with_attn
         self.res_block = ResnetBlock(
-            dim, dim_out, noise_level_emb_dim, norm_groups=norm_groups, dropout=dropout)
+            dim, dim_out, noise_level_emb_dim, norm_groups=norm_groups, dropout=dropout, with_sample=with_sample)
         if with_attn:
             self.attn = SelfAttention(dim_out, norm_groups=norm_groups)
 
@@ -176,9 +177,11 @@ class UNet(nn.Module):
         res_blocks=3,
         dropout=0,
         with_noise_level_emb=True,
-        image_size=128
+        image_size=128,
+        with_sample = True
     ):
         super().__init__()
+        self.with_sample = with_sample
 
         if with_noise_level_emb:
             noise_level_channel = inner_channel
@@ -189,8 +192,8 @@ class UNet(nn.Module):
                 nn.Linear(inner_channel * 4, inner_channel)
             )
         else:
-            noise_level_channel = inner_channel
-            self.noise_level_mlp = nn.Linear(inner_channel, inner_channel)
+            noise_level_channel = None
+            self.noise_level_mlp = None
 
         num_mults = len(channel_mults)
         pre_channel = inner_channel
@@ -206,7 +209,7 @@ class UNet(nn.Module):
                 #downs.append(ResnetBlocWithAttn(
                 #    pre_channel, channel_mult, noise_level_emb_dim=noise_level_channel, norm_groups=norm_groups, dropout=dropout, with_attn=use_attn))
                 downs.append(ResnetBlocWithAttn(
-                    pre_channel, channel_mult, noise_level_emb_dim=noise_level_channel, norm_groups=norm_groups, dropout=dropout, with_attn=False))
+                    pre_channzl, channel_mult, noise_level_emb_dim=noise_level_channel, norm_groups=norm_groups, dropout=dropout, with_attn=False, with_sample=with_sample))
                 feat_channels.append(channel_mult)
                 pre_channel = channel_mult
             if not is_last:
@@ -219,7 +222,7 @@ class UNet(nn.Module):
             #ResnetBlocWithAttn(pre_channel, pre_channel, noise_level_emb_dim=noise_level_channel, norm_groups=norm_groups,
             #                   dropout=dropout, with_attn=False),
             ResnetBlocWithAttn(pre_channel, pre_channel, noise_level_emb_dim=noise_level_channel, norm_groups=norm_groups,
-                               dropout=dropout, with_attn=False)
+                               dropout=dropout, with_attn=False, with_sample=with_sample)
         ])
 
         ups = []
@@ -232,7 +235,7 @@ class UNet(nn.Module):
                     #pre_channel+feat_channels.pop(), channel_mult, noise_level_emb_dim=noise_level_channel, norm_groups=norm_groups,
                     #    dropout=dropout, with_attn=use_attn))
                     pre_channel+feat_channels.pop(), channel_mult, noise_level_emb_dim=noise_level_channel, norm_groups=norm_groups,
-                        dropout=dropout, with_attn=False))
+                        dropout=dropout, with_attn=False, with_sample=with_sample))
                 pre_channel = channel_mult
             if not is_last:
                 ups.append(Upsample(pre_channel))
@@ -246,7 +249,7 @@ class UNet(nn.Module):
         #t = self.noise_level_mlp(time) if exists(
         #    self.noise_level_mlp) else None
         t = self.noise_level_mlp(time) if exists(
-            self.noise_level_mlp) else self.inner_channel
+            self.noise_level_mlp) else None
 
         feats = []
         for layer in self.downs:
