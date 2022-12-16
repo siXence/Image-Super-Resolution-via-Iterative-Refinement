@@ -9,8 +9,8 @@
         "tb_logger": "tb_logger",
         "results": "results",
         "checkpoint": "checkpoint",
-        //"resume_state": null
-        "resume_state": "experiments/distributed_high_sr_ffhq_221211_234001/checkpoint/I100_E1" //pretrain model or training state
+        "resume_state": null
+        //"resume_state": "experiments/distributed_high_sr_ffhq_221211_093455/checkpoint/I500_E1" //pretrain model or training state
     },
     "datasets": {
         "train": {
@@ -21,7 +21,7 @@
             "l_resolution": 512, // low resolution need to super_resolution
             "r_resolution": 512, // high resolution
             "batch_size": 2,
-            "num_workers": 12,
+            "num_workers": 8,
             "use_shuffle": true,
             "data_len": -1 // -1 represents all data used in train
         },
@@ -93,10 +93,10 @@
         }
     },
     "train": {
-        "n_iter": 1000,
-        "val_freq": 200,
-        "save_checkpoint_freq": 100,
-        "print_freq": 50,
+        "n_iter": 10000,
+        "val_freq": 4000,
+        "save_checkpoint_freq": 1000,
+        "print_freq": 1000,
         "optimizer": {
             "type": "adam",
             "lr": 3e-6

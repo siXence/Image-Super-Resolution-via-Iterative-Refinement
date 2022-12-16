@@ -214,7 +214,10 @@ class GaussianDiffusion(nn.Module):
 
     @torch.no_grad()
     def infer_init_predictor(self, x_in, continous=False):
-        return self.init_predictor(x_in, None)
+        batch_size = x_in.shape[0]
+        noise_level = torch.FloatTensor(
+            [self.sqrt_alphas_cumprod_prev[1]]).repeat(batch_size, 1).to(x_in.device)
+        return self.init_predictor(x_in, noise_level)
 
 
     def q_sample(self, x_start, continuous_sqrt_alpha_cumprod, noise=None):
