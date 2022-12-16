@@ -212,6 +212,11 @@ class GaussianDiffusion(nn.Module):
     def super_resolution(self, x_in, continous=False):
         return self.p_sample_loop(x_in, continous)
 
+    @torch.no_grad()
+    def infer_init_predictor(self, x_in, continous=False):
+        return self.init_predictor(x_in, None)
+
+
     def q_sample(self, x_start, continuous_sqrt_alpha_cumprod, noise=None):
         noise = default(noise, lambda: torch.randn_like(x_start))
 

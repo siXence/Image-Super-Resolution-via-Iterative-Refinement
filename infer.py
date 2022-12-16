@@ -86,11 +86,17 @@ if __name__ == "__main__":
             # grid img
             #print("wangxu debug sr = ", visuals['SR'].size())
             sr_img = Metrics.tensor2img(visuals['SR'])  # uint8
+            final_img = Metrics.tensor2img(visuals['FINAL_OUTPUT'])  # uint8
+            ip_img = Metrics.tensor2img(visuals['IP'])  # uint8
             print("wangxu img save = {}/{}_{}_sr_process.png".format(result_path, current_step, idx))
             Metrics.save_img(
                 sr_img, '{}/{}_{}_sr_process.png'.format(result_path, current_step, idx))
             Metrics.save_img(
                 Metrics.tensor2img(visuals['SR'][-1]), '{}/{}_{}_sr.png'.format(result_path, current_step, idx))
+            Metrics.save_img(
+                final_img, '{}/{}_{}_final.png'.format(result_path, current_step, idx))
+            Metrics.save_img(
+                ip_img, '{}/{}_{}_ip.png'.format(result_path, current_step, idx))
 
         Metrics.save_img(
             hr_img, '{}/{}_{}_hr.png'.format(result_path, current_step, idx))

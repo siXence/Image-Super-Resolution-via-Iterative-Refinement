@@ -63,9 +63,12 @@ class DDPM(BaseModel):
             if isinstance(self.netG, nn.DataParallel):
                 self.SR = self.netG.module.super_resolution(
                     self.data['SR'], continous)
+                self.IP = self.netG.module.infer_init_predictor(self.data['SR'])
             else:
                 self.SR = self.netG.super_resolution(
                     self.data['SR'], continous)
+                self.IP = self.netG.infer_init_predictor(self.data['SR'])
+            self.FINAL_OUTPUT = self.IP - self.SR[-1]
         self.netG.train()
 
     def sample(self, batch_size=1, continous=False):
@@ -107,6 +110,8 @@ class DDPM(BaseModel):
                 out_dict['LR'] = self.data['LR'].detach().float().cpu()
             else:
                 out_dict['LR'] = out_dict['INF']
+            out_dict['FINAL_OUTPUT'] = self.FINAL_OUTPUT.detach().float().cpu() 
+            out_dict['IP'] = self.IP.detach().float().cpu()
         return out_dict
 
     def print_network(self):
