@@ -109,7 +109,9 @@ if __name__ == "__main__":
 
                     diffusion.set_new_noise_schedule(
                         opt['model']['beta_schedule']['val'], schedule_phase='val')
-                    for _,  val_data in enumerate(val_loader):
+                    for val_idx,  val_data in enumerate(val_loader):
+                        if val_idx > 3:
+                            break
                         idx += 1
                         diffusion.feed_data(val_data)
                         diffusion.test(continous=False)
