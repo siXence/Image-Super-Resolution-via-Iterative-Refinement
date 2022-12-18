@@ -117,6 +117,8 @@ if __name__ == "__main__":
                         sr_img = Metrics.tensor2img(visuals['SR'])  # uint8
                         hr_img = Metrics.tensor2img(visuals['HR'])  # uint8
                         lr_img = Metrics.tensor2img(visuals['LR'])  # uint8
+                        final_img = Metrics.tensor2img(visuals['FINAL_OUTPUT'])  # uint8
+                        ip_img = Metrics.tensor2img(visuals['IP'])  # uint8
                         fake_img = Metrics.tensor2img(visuals['INF'])  # uint8
                         
 
@@ -129,6 +131,10 @@ if __name__ == "__main__":
                             lr_img, '{}/{}_{}_lr.png'.format(result_path, current_step, idx))
                         Metrics.save_img(
                             fake_img, '{}/{}_{}_inf.png'.format(result_path, current_step, idx))
+                        Metrics.save_img(
+                            final_img, '{}/{}_{}_final.png'.format(result_path, current_step, idx))
+                        Metrics.save_img(
+                            ip_img, '{}/{}_{}_ip.png'.format(result_path, current_step, idx))
                         #print("debug fake_img = ", fake_img)
                         #print("debug sr_img = ", sr_img)
                         #print("debug hr_img = ", hr_img)

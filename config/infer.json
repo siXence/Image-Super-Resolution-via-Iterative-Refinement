@@ -10,7 +10,7 @@
         "results": "results",
         "checkpoint": "checkpoint",
         //"resume_state": null
-        "resume_state": "experiments/distributed_high_sr_ffhq_221217_044906/checkpoint/I2000_E1" //pretrain model or training state
+        "resume_state": "experiments/distributed_high_sr_ffhq_221218_025012/checkpoint/I3000_E2" //pretrain model or training state
     },
     "datasets": {
         "train": {
