@@ -10,7 +10,7 @@
         "results": "results",
         "checkpoint": "checkpoint",
         //"resume_state": null
-        "resume_state": "I5000_E2" //pretrain model or training state
+        "resume_state": "I8000_E4" //pretrain model or training state
     },
     "datasets": {
         "train": {
