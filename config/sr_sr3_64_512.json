@@ -10,13 +10,13 @@
         "results": "results",
         "checkpoint": "checkpoint",
         //"resume_state": null
-        "resume_state": "I8000_E4" //pretrain model or training state
+        "resume_state": "experiments/distributed_high_sr_ffhq_221223_061917/checkpoint/I16000_E8" //pretrain model or training state
     },
     "datasets": {
         "train": {
             "name": "FFHQ",
             "mode": "HR", // whether need LR img
-            "dataroot": "../lq_img_process_512_512",
+            "dataroot": "/content/drive/MyDrive/lq_img_process_512_512",
             "datatype": "img", //lmdb or img, path of img files
             "l_resolution": 512, // low resolution need to super_resolution
             "r_resolution": 512, // high resolution
@@ -28,7 +28,7 @@
         "val": {
             "name": "CelebaHQ",
             "mode": "LRHR",
-            "dataroot": "../lq_img_process_512_512",
+            "dataroot": "/content/drive/MyDrive/lq_img_process_512_512",
             "datatype": "img", //lmdb or img, path of img files
             "l_resolution": 512,
             "r_resolution": 512,
@@ -93,7 +93,7 @@
         }
     },
     "train": {
-        "n_iter": 20000,
+        "n_iter": 25000,
         "val_freq": 1000,
         "save_checkpoint_freq": 1000,
         "print_freq": 500,
